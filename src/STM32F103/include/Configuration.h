@@ -207,7 +207,7 @@
 #define ENDSTOP_X_BACK_ON_HOME 1
 #define ENDSTOP_Y_BACK_ON_HOME 1
 #define ENDSTOP_Z_BACK_ON_HOME 0
-#define ALWAYS_CHECK_ENDSTOPS 1
+#define ALWAYS_CHECK_ENDSTOPS 0
 
 // ################# XYZ movements ###################
 
@@ -310,7 +310,7 @@
 #define ACK_WITH_LINENUMBER 1
 #define WAITING_IDENTIFIER "wait"
 #define ECHO_ON_EXECUTE 1
-#define EEPROM_MODE 0
+#define EEPROM_MODE 1
 #define PS_ON_PIN ORIG_PS_ON_PIN
 
 /* ======== Servos =======
@@ -532,7 +532,7 @@ Values must be in range 1..255
     "xLength": 200,
     "yLength": 200,
     "zLength": 120,
-    "alwaysCheckEndstops": "1",
+    "alwaysCheckEndstops": "0",
     "disableX": "0",
     "disableY": "0",
     "disableZ": "0",
@@ -806,6 +806,7 @@ Values must be in range 1..255
     "jamErrorSteps": 500,
     "jamMinSteps": 10,
     "jamAction": 0,
+    "primaryPort": 1,
     "hasMAX6675": false,
     "hasMAX31855": false,
     "hasGeneric1": true,
@@ -815,7 +816,8 @@ Values must be in range 1..255
     "hasUser1": false,
     "hasUser2": false,
     "numExtruder": 1,
-    "version": 92.3
+    "version": 92.3,
+    "primaryPortName": "Serial"
 }
 ========== End configuration string ==========
 

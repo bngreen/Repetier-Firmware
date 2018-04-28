@@ -1,4 +1,3 @@
-//Copyright 2015 Bruno N. Green
 #include "GPIO.h"
 
 #include "stm32f10x_gpio.h"

@@ -1,5 +1,5 @@
 /*
-    This file is part of Repetier-Firmware-STM32F1 modified from Repetier-Firmware.
+    This file is part of Repetier-Firmware.
 
     Repetier-Firmware is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -27,6 +27,9 @@
 
 #include "Repetier.h"
 #include <malloc.h>
+
+
+
 
 //extern "C" void __cxa_pure_virtual() { }
 extern "C" char *sbrk(int i);
@@ -80,7 +83,7 @@ void HAL::setupTimer() {
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE);
 
-	InitializeTimer(PWM_TIMER, 5, 1536, TIM_CKD_DIV1);
+	InitializeTimer(PWM_TIMER, 11, 1536, TIM_CKD_DIV1);
 	NVIC_InitTypeDef nvicStructure;
 	nvicStructure.NVIC_IRQChannel = PWM_TIMER_IRQ;
 	nvicStructure.NVIC_IRQChannelPreemptionPriority = 6;
@@ -89,7 +92,9 @@ void HAL::setupTimer() {
 	NVIC_Init(&nvicStructure);
 	NVIC_SetPriority((IRQn_Type)PWM_TIMER_IRQ, NVIC_EncodePriority(4, 6, 0));
 
-	InitializeTimer(TIMER1_TIMER, 179, (F_CPU_TRUE / TIMER1_PRESCALE) / TIMER1_CLOCK_FREQ/180, TIM_CKD_DIV1);
+	//InitializeTimer(TIMER1_TIMER, 359, (F_CPU_TRUE / TIMER1_PRESCALE) / TIMER1_CLOCK_FREQ/180, TIM_CKD_DIV1);
+	InitializeTimer(TIMER1_TIMER, 4 - 1, (F_CPU_TRUE / 4) / TIMER1_CLOCK_FREQ, TIM_CKD_DIV1);
+
 	nvicStructure.NVIC_IRQChannel = TIMER1_TIMER_IRQ;
 	nvicStructure.NVIC_IRQChannelPreemptionPriority = 4;
 	nvicStructure.NVIC_IRQChannelSubPriority = 0;
@@ -802,13 +807,16 @@ inline void setTimer(unsigned long delay)
 //    TC_SetRC(TIMER1_TIMER, TIMER1_TIMER_CHANNEL, timer_count);
 //    if(TC_ReadCV(TIMER1_TIMER,TIMER1_TIMER_CHANNEL)>timer_count)
 //      TC_Start(TIMER1_TIMER, TIMER1_TIMER_CHANNEL);
-    uint32_t timer_count = delay/104;
+    //uint32_t timer_count = delay/104;
+
+	uint32_t timer_count = delay + (delay >> 3);
 
     if(timer_count > 65535){
     	remainingTimer = timer_count;
     	timer_count = 65535;
     }
-    else if(timer_count < 1) timer_count = 1;
+    //else if(timer_count < 1) timer_count = 1;
+    else if(timer_count < 90) timer_count = 90;
     TIMER1_TIMER->ARR = timer_count;
     if(TIM_GetCounter(TIMER1_TIMER) > timer_count)
     	TIM_SetCounter(TIMER1_TIMER, 0);

@@ -1,5 +1,3 @@
-//Copyright 2015 Bruno N. Green
-
 #ifndef DEFS_H
 #define DEFS_H
 
@@ -8,6 +6,8 @@
 
 #define OUTPUT 1
 #define INPUT 0
+
+#define SERIAL_BUFFER_SIZE 64
 
 #define byte uint8_t
 

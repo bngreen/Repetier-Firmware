@@ -1,4 +1,5 @@
 //Copyright 2015 Bruno N. Green
+
 #ifndef CIRCULARBUFFER_HPP
 #define CIRCULARBUFFER_HPP
 
@@ -40,7 +41,7 @@ public:
 	}
 
 	uint32_t GetMaxWriteSize(){
-		return min<uint32_t>(BSize-GetAvailable(), BSize-WritePos);
+		return min<uint32_t>(BSize-GetAvailable()-1, BSize-WritePos-1);
 	}
 
 	T* volatile BeginWrite(){
@@ -49,8 +50,13 @@ public:
 	void EndWrite(uint32_t size){
 		WritePos = (WritePos+size) % BSize;
 	}
-	uint32_t GetAvailable() { return abs(WritePos - ReadPos) % BSize; }
-	bool IsFull() { return GetAvailable() >= BSize; }
+	uint32_t GetAvailable() {
+		if(ReadPos > WritePos)
+			return (BSize - ReadPos) + WritePos;
+		else
+			return WritePos - ReadPos;
+	}
+	bool IsFull() { return GetAvailable() >= BSize - 1; }
 	bool IsEmpty() { return GetAvailable() == 0; }
 };
 

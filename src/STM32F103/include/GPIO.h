@@ -1,4 +1,3 @@
-//Copyright 2015 Bruno N. Green
 #ifndef GPIO_H
 #define GPIO_H
 

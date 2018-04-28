@@ -1,5 +1,5 @@
 /*
-    This file is part of Repetier-Firmware-STM32F1 modified from Repetier-Firmware.
+    This file is part of Repetier-Firmware.
 
     Repetier-Firmware is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -283,6 +283,8 @@ union eeval_t {
 
 #include "delay.h"
 
+#include "at25.h"
+
 class HAL
 {
 public:
@@ -309,6 +311,9 @@ public:
 			while (1);                                  /* Capture error */
 		}
 #if EEPROM_AVAILABLE && EEPROM_MODE != 0
+
+		AT25Init();
+
         // Copy eeprom to ram for faster access
         int i,n = EEPROM_BYTES;
         for(i=0;i<EEPROM_BYTES;i+=4) {
@@ -480,6 +485,12 @@ public:
     // Write any data type to EEPROM
     static inline void eprBurnValue(unsigned int pos, int size, union eeval_t newvalue) 
     {
+//#if EEPROM_AVAILABLE == EEPROM_SPI_ALLIGATOR
+		int i;
+		for(i=0;i<size;i++){
+			AT25Write(pos+i, 1, &newvalue.b[i]);
+		}
+//#endif//(MOTHERBOARD==500) || (MOTHERBOARD==501)
 //        i2cStartAddr(EEPROM_SERIAL_ADDR << 1 | I2C_WRITE, pos);
 //        i2cWriting(newvalue.b[0]);        // write first byte
 //        for (int i=1;i<size;i++) {
@@ -502,8 +513,14 @@ public:
     // Read any data type from EEPROM that was previously written by eprBurnValue
     static inline union eeval_t eprGetValue(unsigned int pos, int size)
     {
-        int i;
-        eeval_t v;
+		//#if EEPROM_AVAILABLE == EEPROM_SPI_ALLIGATOR
+		int i = 0;
+		eeval_t v;
+		AT25Read(pos, size, v.b);
+		return v;
+		//#endif //(MOTHERBOARD==500) || (MOTHERBOARD==501)
+//        int i;
+//        eeval_t v;
 
 //        size--;
 //        // set read location
@@ -516,7 +533,7 @@ public:
 //        }
 //        // read last byte
 //        v.b[i] = i2cReadNak();
-        return v;
+//        return v;
     }
 
     static inline void allowInterrupts()

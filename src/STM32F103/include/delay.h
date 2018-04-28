@@ -1,4 +1,3 @@
-//Copyright 2015 Bruno N. Green
 #ifndef DELAY_H
 #define DELAY_H
 

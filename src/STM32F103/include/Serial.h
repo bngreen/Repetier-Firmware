@@ -1,4 +1,5 @@
 //Copyright 2015 Bruno N. Green
+
 #ifndef SERIAL_H
 #define SERIAL_H
 

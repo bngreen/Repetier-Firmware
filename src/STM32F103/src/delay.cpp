@@ -1,4 +1,3 @@
-//Copyright 2015 Bruno N. Green
 #include "delay.h"
 
 volatile uint64_t tickCounter;

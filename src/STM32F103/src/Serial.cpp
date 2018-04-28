@@ -1,4 +1,5 @@
 //Copyright 2015 Bruno N. Green
+
 #include "Serial.h"
 
 #include "stm32f10x_usart.h"
